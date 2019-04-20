@@ -7,14 +7,15 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import elses.analytics.data.consumer.FirebaseDatabaseConsumer;
+import elses.analytics.constants.TestCase;
+import elses.analytics.service.MetricCollectionService;
 
 @SpringBootApplication
 @EnableScheduling
 public class App {
 	
 	@Autowired
-	FirebaseDatabaseConsumer consumer;
+	MetricCollectionService service;
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(App.class, args);
@@ -26,6 +27,6 @@ public class App {
 	 */
 	@EventListener(ApplicationReadyEvent.class)
 	public void consumeFirebaseRecords() {
-		consumer.fetchRecordsAllTestCases();
+		service.getRssi(TestCase.allBeaconsAt1mPiledUp);
 	}
 }

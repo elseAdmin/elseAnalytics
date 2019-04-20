@@ -1,19 +1,22 @@
 package elses.analytics.data.consumer;
 
+import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import elses.analytics.constants.ApplicationConstants;
-import elses.analytics.constants.TestCase;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class FirebaseDatabaseConsumer {
-	public void fetchRecordsAllTestCases() {
+	public JSONObject fetchRecords(String testCase) {
 		RestTemplate restTemplate = new RestTemplate();
 		String fooResourceUrl = ApplicationConstants.urlPreFix + ApplicationConstants.FirebaseProjectId
-				+ ApplicationConstants.urlPostFix + TestCase.allBeaconsAt1mPiledUp+".json";
+				+ ApplicationConstants.urlPostFix + testCase +".json";
 		ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl, String.class);
-		System.out.print(response.getBody());
+		JSONObject responseJson = new JSONObject(response.getBody());
+		return responseJson;
 	}
 }
