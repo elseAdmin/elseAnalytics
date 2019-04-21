@@ -19,11 +19,33 @@ public class MetricCollectionService {
 	@Autowired
 	FirebaseDatabaseConsumer consumer;
 
-	public void getRssi(String testCase) {
+	public void geAverageRssi(String testCase) {
 		JSONObject responseJson = consumer.fetchRecords(testCase);
 		Map<String, List<Long>> rssiMap = getBeaconRssiMap(responseJson);
 		Map<String, Long> avgRssiMap = getAvgRssi(rssiMap);
-		System.out.println(avgRssiMap);
+		System.out.println(testCase + " avg rssi map : " + avgRssiMap);
+	}
+
+	public void getMeanRssi(String testCase) {
+		JSONObject responseJson = consumer.fetchRecords(testCase);
+		Map<String, List<Long>> rssiMap = getBeaconRssiMap(responseJson);
+		System.out.println(testCase + " rssi map : " + rssiMap);
+		Map<String, List<Long>> consecutiveMeanRssiMap = getMeanConsecutivelyRssi(rssiMap);
+		System.out.println(testCase + " consecutive mean rssi map : " + consecutiveMeanRssiMap);
+	}
+
+	private Map<String, List<Long>> getMeanConsecutivelyRssi(Map<String, List<Long>> rssiMap) {
+		//Map<String, List<Long>> consecutiveMeanRssiMap = new HashMap<String,List<Long>>();
+		for (Entry<String, List<Long>> e : rssiMap.entrySet()) {
+			//long total = 0;
+			long size = e.getValue().size();
+			for (int i = 0; i < e.getValue().size()-1; i++) {
+				e.getValue().set(i, ((e.getValue().get(i) + e.getValue().get(i + 1)) / 2));
+			}
+			e.getValue().remove(size-1);
+			//consecutiveMeanRssiMap.put(e.getKey(), e.getValue());
+		}
+		return rssiMap;
 	}
 
 	private Map<String, Long> getAvgRssi(Map<String, List<Long>> rssiMap) {

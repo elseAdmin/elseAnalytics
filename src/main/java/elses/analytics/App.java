@@ -27,6 +27,12 @@ public class App {
 	 */
 	@EventListener(ApplicationReadyEvent.class)
 	public void consumeFirebaseRecords() {
-		service.getRssi(TestCase.allBeaconsAt1mPiledUp);
+		service.geAverageRssi(TestCase.allBeaconsAt1mPiledUp);
+		service.geAverageRssi(TestCase.allBeaconsAt2mPiledUp);
+		service.geAverageRssi(TestCase.allBeaconsAt3mPiledUp);
+		
+		service.getMeanRssi(TestCase.allBeaconsAt1mPiledUp);
+		service.getMeanRssi(TestCase.allBeaconsAt2mPiledUp);
+		service.getMeanRssi(TestCase.allBeaconsAt3mPiledUp);
 	}
 }
