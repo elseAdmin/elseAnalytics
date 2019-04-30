@@ -62,6 +62,7 @@ public class MetricCollectionService {
 			rssi.set(i, (rssi.get(i)+rssi.get(i+1))/2);
 		}
 		rssi.remove(rssi.size()-1);
+//		System.out.println("List :: "+rssi);
 
 		return getGausianMethod(rssi);
 	}
