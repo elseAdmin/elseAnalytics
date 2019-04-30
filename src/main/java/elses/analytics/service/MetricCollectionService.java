@@ -30,13 +30,13 @@ public class MetricCollectionService {
 		JSONObject responseJson = consumer.fetchRecords(testCase);
 		Map<String, List<Long>> rssiMap = getBeaconRssiMap(responseJson);
 		System.out.println(testCase + " rssi map : " + rssiMap);
-		Map<String, List<Long>> consecutiveMeanRssiMap = getMeanConsecutivelyRssi(rssiMap);
+		Map<String, Long> consecutiveMeanRssiMap = getMeanConsecutivelyRssi(rssiMap);
 		System.out.println(testCase + " consecutive mean rssi map : " + consecutiveMeanRssiMap);
 	}
 
-	private Map<String, List<Long>> getMeanConsecutivelyRssi(Map<String, List<Long>> rssiMap) {
+	private Map<String, Long> getMeanConsecutivelyRssi(Map<String, List<Long>> rssiMap) {
 		//Map<String, List<Long>> consecutiveMeanRssiMap = new HashMap<String,List<Long>>();
-		for (Entry<String, List<Long>> e : rssiMap.entrySet()) {
+		/*for (Entry<String, List<Long>> e : rssiMap.entrySet()) {
 			//long total = 0;
 			long size = e.getValue().size();
 			for (int i = 0; i < e.getValue().size()-1; i++) {
@@ -45,7 +45,25 @@ public class MetricCollectionService {
 			e.getValue().remove(size-1);
 			//consecutiveMeanRssiMap.put(e.getKey(), e.getValue());
 		}
-		return rssiMap;
+		return rssiMap;*/
+		Map<String, Long> meanRssiMap = new HashMap<String, Long>();
+		for(Entry<String, List<Long>> iterator : rssiMap.entrySet()){
+			meanRssiMap.put(iterator.getKey(), getGausianMethod(iterator.getValue()));
+		}
+		return meanRssiMap;
+	}
+
+	private Long getGausianMethod(List<Long> rssi){
+		if(rssi.size() == 1){
+			return rssi.get(0);
+		}
+
+		for(int i=0; i<rssi.size()-1; ++i){
+			rssi.set(i, (rssi.get(i)+rssi.get(i+1))/2);
+		}
+		rssi.remove(rssi.size()-1);
+
+		return getGausianMethod(rssi);
 	}
 
 	private Map<String, Long> getAvgRssi(Map<String, List<Long>> rssiMap) {
