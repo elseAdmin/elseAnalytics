@@ -19,6 +19,20 @@ public class MetricCollectionService {
 	@Autowired
 	FirebaseDatabaseConsumer consumer;
 
+	@Autowired
+	KalmanFilter kalmanFilter;
+
+	public void getKalmanFilterValue(String testCase){
+		JSONObject responseJson = consumer.fetchRecords(testCase);
+		Map<String, List<Long>> rssiMap = getBeaconRssiMap(responseJson);
+		Map<String, Float> kalmanRssiMap = new HashMap<String, Float>();
+		for(Entry<String, List<Long>> e : rssiMap.entrySet()){
+			Float kalman = kalmanFilter.filter(e.getValue());
+			kalmanRssiMap.put(e.getKey(),kalman);
+		}
+		System.out.println(testCase + " avg rssi map : " + kalmanRssiMap);
+	}
+
 	public void geAverageRssi(String testCase) {
 		JSONObject responseJson = consumer.fetchRecords(testCase);
 		Map<String, List<Long>> rssiMap = getBeaconRssiMap(responseJson);
