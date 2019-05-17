@@ -22,6 +22,20 @@ public class MetricCollectionService {
 	@Autowired
 	KalmanFilter kalmanFilter;
 
+	@Autowired
+	ArmaFilter armaFilter;
+
+	public void getArmaFilterValue(String testCase){
+		JSONObject responseJson = consumer.fetchRecords(testCase);
+		Map<String, List<Long>> rssiMap = getBeaconRssiMap(responseJson);
+		Map<String, Float> armaRssiMap = new HashMap<String, Float>();
+		for(Entry<String, List<Long>> e : rssiMap.entrySet()){
+			Float kalman = armaFilter.filter(e.getValue());
+			armaRssiMap.put(e.getKey(),kalman);
+		}
+		System.out.println(testCase + " arma avg rssi map : " + armaRssiMap);
+	}
+
 	public void getKalmanFilterValue(String testCase){
 		JSONObject responseJson = consumer.fetchRecords(testCase);
 		Map<String, List<Long>> rssiMap = getBeaconRssiMap(responseJson);
@@ -30,7 +44,7 @@ public class MetricCollectionService {
 			Float kalman = kalmanFilter.filter(e.getValue());
 			kalmanRssiMap.put(e.getKey(),kalman);
 		}
-		System.out.println(testCase + " avg rssi map : " + kalmanRssiMap);
+		System.out.println(testCase + " kalman avg rssi map : " + kalmanRssiMap);
 	}
 
 	public void geAverageRssi(String testCase) {

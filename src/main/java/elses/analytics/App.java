@@ -39,5 +39,9 @@ public class App {
 		service.getKalmanFilterValue(TestCase.allBeaconsAt2mPiledUp);
 		service.getKalmanFilterValue(TestCase.allBeaconsAt3mPiledUp);
 
+		service.getArmaFilterValue(TestCase.allBeaconsAt1mPiledUp);
+		service.getArmaFilterValue(TestCase.allBeaconsAt2mPiledUp);
+		service.getArmaFilterValue(TestCase.allBeaconsAt3mPiledUp);
+
 	}
 }
