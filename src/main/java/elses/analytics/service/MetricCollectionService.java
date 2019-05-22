@@ -32,6 +32,7 @@ public class MetricCollectionService {
 		for(Entry<String, List<Long>> e : rssiMap.entrySet()){
 			Float kalman = armaFilter.filter(e.getValue());
 			armaRssiMap.put(e.getKey(),kalman);
+			System.out.println(testCase + " distance for kalman avg rssi "+e.getKey()+" : "+ calculateDistance(kalman, -55));
 		}
 		System.out.println(testCase + " arma avg rssi map : " + armaRssiMap);
 	}
@@ -43,6 +44,7 @@ public class MetricCollectionService {
 		for(Entry<String, List<Long>> e : rssiMap.entrySet()){
 			Float kalman = kalmanFilter.filter(e.getValue());
 			kalmanRssiMap.put(e.getKey(),kalman);
+			System.out.println(testCase + " distance for kalman avg rssi "+e.getKey()+" : "+ calculateDistance(kalman, -55));
 		}
 		System.out.println(testCase + " kalman avg rssi map : " + kalmanRssiMap);
 	}
@@ -52,6 +54,9 @@ public class MetricCollectionService {
 		Map<String, List<Long>> rssiMap = getBeaconRssiMap(responseJson);
 		Map<String, Long> avgRssiMap = getAvgRssi(rssiMap);
 		System.out.println(testCase + " avg rssi map : " + avgRssiMap);
+		for(Entry<String, Long> e : avgRssiMap.entrySet()){
+			System.out.println(testCase + " distance for avg rssi "+e.getKey()+" : "+ calculateDistance(Float.valueOf(e.getValue()), -55));
+		}
 	}
 
 	public void getMeanRssi(String testCase) {
@@ -60,6 +65,14 @@ public class MetricCollectionService {
 		System.out.println(testCase + " rssi map : " + rssiMap);
 		Map<String, Long> consecutiveMeanRssiMap = getMeanConsecutivelyRssi(rssiMap);
 		System.out.println(testCase + " consecutive mean rssi map : " + consecutiveMeanRssiMap);
+		for(Entry<String, Long> e : consecutiveMeanRssiMap.entrySet()){
+			System.out.println(testCase + " distance for mean rssi "+e.getKey()+" : "+ calculateDistance(Float.valueOf(e.getValue()), -55));
+		}
+	}
+
+	private Double calculateDistance(Float rssi, int power){
+		Double distance = Math.pow(10,(power-rssi)/(10*2));
+		return distance;
 	}
 
 	private Map<String, Long> getMeanConsecutivelyRssi(Map<String, List<Long>> rssiMap) {
