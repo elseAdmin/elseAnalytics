@@ -34,6 +34,7 @@ public class App {
 		service.getMeanRssi(TestCase.allBeaconsAt1mPiledUp);
 		service.getMeanRssi(TestCase.allBeaconsAt2mPiledUp);
 		service.getMeanRssi(TestCase.allBeaconsAt3mPiledUp);
+		service.getMeanRssi(TestCase.allBeaconsAt4mPiledUp);
 
 		service.getKalmanFilterValue(TestCase.allBeaconsAt1mPiledUp);
 		service.getKalmanFilterValue(TestCase.allBeaconsAt2mPiledUp);
