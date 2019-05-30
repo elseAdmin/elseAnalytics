@@ -84,7 +84,7 @@ public class MetricCollectionService {
 
 	private double getMeanRssiByEliminating(List<Long> rssi){
 		double avg = 0;
-		int removeValue = (int) (rssi.size() * 0.1);
+		int removeValue = 1+ (int) (rssi.size() * 0.1);
 		int counter = 0;
 		for (int i = removeValue ; i <rssi.size() - removeValue; ++i){
 			avg += rssi.get(i);
