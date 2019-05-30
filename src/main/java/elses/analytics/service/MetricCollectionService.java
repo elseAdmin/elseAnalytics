@@ -1,9 +1,6 @@
 package elses.analytics.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.json.JSONObject;
@@ -70,6 +67,30 @@ public class MetricCollectionService {
 		for(Entry<String, Long> e : consecutiveMeanRssiMap.entrySet()){
 			System.out.println(testCase + " distance for mean rssi "+e.getKey()+" : "+ calculateDistance(Float.valueOf(e.getValue()), Power));
 		}
+	}
+
+	public void getMeanByElimination(String testCase) {
+		JSONObject responseJson = consumer.fetchRecords(testCase);
+		Map<String, List<Long>> rssiMap = getBeaconRssiMap(responseJson);
+		Map<String, Double> resultRssiMap = new HashMap<String, Double>();
+		for(Entry<String, List<Long>> e : rssiMap.entrySet()){
+			Collections.sort(e.getValue());
+			double rssiCalculated = getMeanRssiByEliminating(e.getValue());
+			resultRssiMap.put(e.getKey(),rssiCalculated);
+			System.out.println(testCase + " distance for avg rssi "+e.getKey()+" : "+ calculateDistance((float)rssiCalculated, Power));
+		}
+		System.out.println(testCase + " avg by eliminating rssi map : " + resultRssiMap);
+	}
+
+	private double getMeanRssiByEliminating(List<Long> rssi){
+		double avg = 0;
+		int removeValue = (int) (rssi.size() * 0.1);
+		int counter = 0;
+		for (int i = removeValue ; i <rssi.size() - removeValue; ++i){
+			avg += rssi.get(i);
+			counter++;
+		}
+		return avg/counter;
 	}
 
 	private Double calculateDistance(Float rssi, int power){

@@ -30,7 +30,7 @@ public class App {
 		service.geAverageRssi(TestCase.allBeaconsAt1mPiledUp);
 		service.geAverageRssi(TestCase.allBeaconsAt2mPiledUp);
 		service.geAverageRssi(TestCase.allBeaconsAt3mPiledUp);
-		
+
 		service.getMeanRssi(TestCase.allBeaconsAt1mPiledUp);
 		service.getMeanRssi(TestCase.allBeaconsAt2mPiledUp);
 		service.getMeanRssi(TestCase.allBeaconsAt3mPiledUp);
@@ -43,6 +43,8 @@ public class App {
 		service.getArmaFilterValue(TestCase.allBeaconsAt1mPiledUp);
 		service.getArmaFilterValue(TestCase.allBeaconsAt2mPiledUp);
 		service.getArmaFilterValue(TestCase.allBeaconsAt3mPiledUp);
+
+		service.getMeanByElimination(TestCase.allBeaconsAt1mPiledUp);
 
 	}
 }
